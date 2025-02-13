@@ -62,11 +62,19 @@ const App:React.FC = () => {
 
   return (
     <div className="App">
-      <input type="file" id="input" accept="image/*" multiple onChange={handleImageUpload}/>
-      <div>{imageState.xCoord}</div>
       {images.length > 0 ? 
             images.map((image, indexButNotThatOne) => (
-              <Images data={image} setData={setImageState}/>
+              <Images data={image}  setData={(newData: stateInterface | ((prev: stateInterface) => stateInterface)) => {
+                setImages(prev => prev.map((img, i) => 
+                  i === indexButNotThatOne ? 
+                    // handle both function and direct value updates
+                    (typeof newData === 'function' 
+                      ? (newData as (prev: stateInterface) => stateInterface)(img)
+                      : newData
+                    )
+                    : img
+                ));
+              }}/>
         
             )) : 
             <div>No images</div>
@@ -75,6 +83,14 @@ const App:React.FC = () => {
           <Images data={imageState} setData={setImageState}/>
         </div> */}
       {/* <FPSCounter /> */}
+      <div className='toolbar' style={{position: 'absolute', zIndex: 999, left: '90%', display: 'block'}}>
+        <button style={{zIndex: 999, display: 'block'}}>Layers</button>
+        <button style={{zIndex: 999, display: 'block'}}>Upload</button>
+        <input type="file" id="input" accept="image/*" multiple onChange={handleImageUpload} style={{zIndex: 999, display: 'block'}}/>
+        <button style={{zIndex: 999, display: 'block'}}>Text</button>
+        <button style={{zIndex: 999, display: 'block'}}>Export</button>
+
+      </div>
     </div>
   );
 }

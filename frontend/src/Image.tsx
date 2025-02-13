@@ -89,6 +89,7 @@ const DraggableImage: React.FC<ImageProps> = ({ data, setData }) => {
       //  transform: isDragging ? 'scale(1.02)' : 'scale(1)',
        transition: 'transform 0.1s',
        willChange: 'transform',
+       zIndex: 1,
      }}
      onMouseDown={handleMouseDown}
      onClick={handleClick}
